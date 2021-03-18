@@ -1,3 +1,5 @@
 open_jtalk.wav
 *.pyc
 .env
+credentials.json
+token.pickle
