@@ -8,11 +8,16 @@ import random
 from dotenv import load_dotenv
 import os
 import toggl_driver
+import datetime
+import open_weather
 
 # Toggl Trackの準備
 load_dotenv()
 toggl_token = os.getenv('TOGGL_API')
 toggl = toggl_driver.TogglDriver(_token=toggl_token)
+
+# Open Weatherの準備
+weather_key = os.getenv('WEATHER_API')
 
 # Juliusに接続する準備
 host = 'localhost'
@@ -42,17 +47,39 @@ while True:
 				print('🐛 word：' + word)
 
 		if word == 'おはよう':
-			# 挨拶にランダムで使いたい文字列
+			speech_text = ''
+			# 挨拶の読み上げをセット
 			morning_greet = [u'おはよう']
-			jtalk.jtalk(random.choice(morning_greet) + u'！睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。')
+			speech_text += random.choice(morning_greet) + u'！'
 
-			# Toggl trackに記録を終了
+			# Toggl trackの記録を終了
+			speech_text += u'睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。'
 			id = toggl.get_running_time_entry()
 			if id is not None:
 				r = toggl.stop(id)
 
+			speech_text += u'今日の天気や予定を読み上げるよ。'
+
+			# 日付の読み上げをセット
+			dt = datetime.datetime.now()
+			speech_text += str(dt.year) + u'年' + str(dt.month) + u'月' + str(dt.day) + u'日。'
+
+			# 天気の読み上げをセット
+			weather = open_weather.getWeather(weather_key)
+			try:
+				speech_text += weather['city']['name'] + u'の正午の天気は、'
+				speech_text += weather['list'][0]['weather'][0]['description'] + u'。'
+				speech_text += u'最高気温は、' + str(weather['list'][0]['main']['temp_max']) + u'度。'
+				speech_text += u'最低気温は、' + str(weather['list'][0]['main']['temp_min']) + u'度。'
+				speech_text += u'15時の天気は、' + weather['list'][1]['weather'][0]['description'] + u'だよ。'
+			except TypeError:
+				print('💥Error: open weather type error')
+				pass
+
+			jtalk.jtalk(speech_text)
+
 		elif word == 'おやすみ':
-			# 挨拶にランダムで使いたい文字列
+			# 挨拶の読み上げ
 			goodnight_greet = [u'おやすみまる']
 			jtalk.jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！' + random.choice(goodnight_greet))
 
@@ -60,6 +87,7 @@ while True:
 			id = toggl.get_running_time_entry()
 			if id is not None:
 				r = toggl.stop(id)
-			toggl.start("睡眠", 168180846) # ベタがき
+			# TODO: 仮でコメントアウト
+			# toggl.start("睡眠", 168180846) # ベタがき
 
 		res = ''

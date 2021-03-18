@@ -5,10 +5,7 @@ from datetime import datetime
 def jtalk(t):
     open_jtalk=['open_jtalk']
     mech=['-x','/var/lib/mecab/dic/open-jtalk/naist-jdic']
-    # htsvoice=['-m','/usr/share/hts-voice/mei/mei_normal.htsvoice']
     htsvoice=['-m','/usr/share/hts-voice/mei/mei_bashful.htsvoice']
-    # htsvoice=['-m','/usr/share/hts-voice/mei/mei_happy.htsvoice']
-    # htsvoice=['-m','/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice']
     speed=['-r','1.0']
     outwav=['-ow','open_jtalk.wav']
     cmd=open_jtalk+mech+htsvoice+speed+outwav
