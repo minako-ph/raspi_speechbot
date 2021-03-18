@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 import datetime
 import pickle
@@ -9,7 +10,7 @@ from google.auth.transport.requests import Request
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
-def main():
+def get_events():
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
@@ -35,18 +36,31 @@ def main():
     service = build('calendar', 'v3', credentials=creds)
 
     # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
+    now = datetime.datetime.now()
+    today_start = str(now.year) + '-' + str(now.month).zfill(2) + '-' + str(now.day).zfill(2) + 'T00:00:00+09:00'
+    today_end = str(now.year) + '-' + str(now.month).zfill(2) + '-' + str(now.day).zfill(2) + 'T23:59:59+09:00'
+
+    events_result = service.events().list(calendarId='primary',
+                                        timeMin=today_start,
+                                        timeMax=today_end,
+                                        maxResults=10,
+                                        singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
 
+    event_text = ''
+
     if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+        event_text = u'今日の予定はありません'
+        print(event_text)
+        return event_text
+    else:
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            event_text += str(start[11:13]) + u'時' + str(start[14:16]) + u'分に'
+            event_text += event['summary'] + u'、'
+        print(event_text)
+        return event_text
 
 if __name__ == '__main__':
-    main()
+    get_events()

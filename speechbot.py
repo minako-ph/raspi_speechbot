@@ -10,6 +10,7 @@ import os
 import toggl_driver
 import datetime
 import open_weather
+import google_calender
 
 # Toggl Trackの準備
 load_dotenv()
@@ -75,6 +76,10 @@ while True:
 			except TypeError:
 				print('💥Error: open weather type error')
 				pass
+			
+			# カレンダーの読み上げをセット
+			events = google_calender.get_events()
+			speech_text += u'今日の予定は、' + events + u'だよ。'
 
 			jtalk.jtalk(speech_text)
 
