@@ -36,8 +36,8 @@ class TogglDriver:
             return None
         return data['id']
 
-    def start(self, description):
-        params = {"time_entry": {"description": description, "created_with": "python"}}
+    def start(self, description, pid):
+        params = {"time_entry": {"description": description, "pid": pid, "created_with": "python"}}
         r = requests.post('https://www.toggl.com/api/v8/time_entries/start',
                           auth=HTTPBasicAuth(self._token, 'api_token'),
                           headers=self._headers,

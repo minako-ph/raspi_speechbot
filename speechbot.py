@@ -43,7 +43,7 @@ while True:
 
 		if word == 'おはよう':
 			# 挨拶にランダムで使いたい文字列
-			morning_greet = [u'おはよう', u'おはまる', u'おはぴよ', u'おっはー']
+			morning_greet = [u'おはよう']
 			jtalk.jtalk(random.choice(morning_greet) + u'！睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。')
 
 			# Toggl trackに記録を終了
@@ -53,13 +53,13 @@ while True:
 
 		elif word == 'おやすみ':
 			# 挨拶にランダムで使いたい文字列
-			goodnight_greet = [u'おやすみ', u'おやすみまる', u'おやすみだぴよ', u'おやすー']
+			goodnight_greet = [u'おやすみまる']
 			jtalk.jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！' + random.choice(goodnight_greet))
 
 			# Toggl trackに記録を開始
 			id = toggl.get_running_time_entry()
 			if id is not None:
 				r = toggl.stop(id)
-			toggl.start("睡眠")
+			toggl.start("睡眠", 168180846) # ベタがき
 
 		res = ''
