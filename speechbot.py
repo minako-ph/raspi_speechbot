@@ -5,11 +5,18 @@ import picamera
 import subprocess
 import jtalk
 import random
+from dotenv import load_dotenv
+import os
+import toggl_driver
 
-host = 'localhost'
-port = 10500
+# Toggl Trackの準備
+load_dotenv()
+toggl_token = os.getenv('TOGGL_API')
+toggl = toggl_driver.TogglDriver(_token=toggl_token)
 
 # Juliusに接続する準備
+host = 'localhost'
+port = 10500
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((host, port))
 
@@ -24,27 +31,35 @@ while True:
 	for line in res.split('\n'):
 		# Juliusから取得した値から認識文字列の行を探す
 		index = line.find('WORD=')
-		# 認識文字列があったら...
+		# 認識文字列があった場合
 		if index != -1:
 			# 認識文字列部分だけを抜き取る
 			line = line[index + 6 : line.find('"', index + 6)]
 			# 文字列の開始記号以外を格納していく
 			if line != '[s]':
-				# note 最初はwordに[s]が入るので文字列認識条件文を通らない
-				# その後のループは末尾に[/s]が着くので文字列認識条件文を通らない
+				# Note: おはようの次はおはよう[/s]となる
 				word = word + line
 				print('🐛 word：' + word)
 
-		# 文字列を認識したら...
 		if word == 'おはよう':
-			morning_word = [u'おはよう', u'おはまる', u'おはぴよ', u'おっはー']
-			jtalk.jtalk(random.choice(morning_word))
-			# jtalk.jtalk(u'睡眠の記録を終了したよ。')
-			# jtalk.jtalk(u'今日も一日頑張っていきまっしょい。今日の情報を読み上げるね。')
-			# jtalk.jtalk(u'今日の天気はxxxx 最高気温はxxxx 最低気温はxxxx。')
-			# jtalk.jtalk(u'今日の予定はxxx時からxxx,xxx時からxxxだよ。')
-			# jtalk.jtalk(u'今日のタスクはxxx, xxx, xxx だよ。')
+			# 挨拶にランダムで使いたい文字列
+			morning_greet = [u'おはよう', u'おはまる', u'おはぴよ', u'おっはー']
+			jtalk.jtalk(random.choice(morning_greet) + u'！睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。')
+
+			# Toggl trackに記録を終了
+			id = toggl.get_running_time_entry()
+			if id is not None:
+				r = toggl.stop(id)
+
 		elif word == 'おやすみ':
-			jtalk.jtalk(u'おやすみまる')
-			# jtalk.jtalk('睡眠の記録を開始するよ。今日も1日お疲れ様！おやすみまる〜〜〜〜。')
+			# 挨拶にランダムで使いたい文字列
+			goodnight_greet = [u'おやすみ', u'おやすみまる', u'おやすみだぴよ', u'おやすー']
+			jtalk.jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！' + random.choice(goodnight_greet))
+
+			# Toggl trackに記録を開始
+			id = toggl.get_running_time_entry()
+			if id is not None:
+				r = toggl.stop(id)
+			toggl.start("睡眠")
+
 		res = ''
