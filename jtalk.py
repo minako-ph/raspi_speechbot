@@ -3,6 +3,7 @@ import subprocess
 from datetime import datetime
 
 def jtalk(t):
+    # 合成音声の作成
     open_jtalk=['open_jtalk']
     mech=['-x','/var/lib/mecab/dic/open-jtalk/naist-jdic']
     htsvoice=['-m','/usr/share/hts-voice/mei/mei_bashful.htsvoice']
@@ -13,8 +14,10 @@ def jtalk(t):
     c.stdin.write(t.encode('utf-8'))
     c.stdin.close()
     c.wait()
+    # 音声の読み上げ
     aplay = ['aplay','-q','open_jtalk.wav','-Dhw:0,0']
     wr = subprocess.Popen(aplay) # 同期処理にしたい
+    wr.wait()
 
 def say_datetime():
     d = datetime.now()
