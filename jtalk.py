@@ -2,22 +2,24 @@
 import subprocess
 from datetime import datetime
 
-def jtalk(t):
+def generate_jtalk(text, name):
     # 合成音声の作成
     open_jtalk=['open_jtalk']
     mech=['-x','/var/lib/mecab/dic/open-jtalk/naist-jdic']
     htsvoice=['-m','/usr/share/hts-voice/mei/mei_bashful.htsvoice']
     speed=['-r','1.0']
-    outwav=['-ow','open_jtalk.wav']
+    outwav=['-ow',name + '.wav']
     cmd=open_jtalk+mech+htsvoice+speed+outwav
     c = subprocess.Popen(cmd,stdin=subprocess.PIPE)
-    c.stdin.write(t.encode('utf-8'))
+    c.stdin.write(text.encode('utf-8'))
     c.stdin.close()
     c.wait()
+
+def speech_jtalk(name):
     # 音声の読み上げ
-    aplay = ['aplay','-q','open_jtalk.wav','-Dhw:0,0']
-    wr = subprocess.Popen(aplay) # 同期処理にしたい
-    wr.wait()
+    aplay = ['aplay','-q',name + '.wav','-Dhw:0,0']
+    wr = subprocess.Popen(aplay)
+    return wr
 
 def say_datetime():
     d = datetime.now()

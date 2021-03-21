@@ -61,47 +61,76 @@ while True:
 				print('🐛 word：' + word)
 
 		if word == 'おはよう':
-			# 挨拶の読み上げをセット
-			morning_greet = [u'おはよう']
-			jtalk.jtalk(random.choice(morning_greet) + u'！' + u'睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。')
+			print('🐛 debug６')
 
-			# TODO: 仮でコメントアウト
+			# TODO: バラバラになってしまった💬の処理をまとめる
+
+			# 💬挨拶の読み上げ
+			morning_greet = u'おはよう！睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。'
+			jtalk.generate_jtalk(morning_greet, 'talk_morning')
+			talk_morning = jtalk.speech_jtalk('talk_morning')
+
+			# FIXME: debug用にコメントアウト
 			# Toggl trackの記録を終了
 			# id = toggl.get_running_time_entry()
 			# if id is not None:
 			# 	r = toggl.stop(id)
 
-			jtalk.jtalk(u'今日の天気や予定を読み上げるよ。調べるからちょっと待ってねえ。')
+			# 💬次の音声の生成
+			jtalk.generate_jtalk(u'今日の天気や予定を読み上げるよ。調べるからちょっと待ってねぇ。', 'talk_announce')
 
-			speech_text = ''
+			# 💬前の再生が終わるのを待って次の次のトークの読み上げ
+			talk_morning.wait()
+			talk_announce = jtalk.speech_jtalk('talk_announce')
+
+			weather_text = ''
 			# 日付の読み上げをセット
 			dt = datetime.datetime.now()
-			speech_text += str(dt.year) + u'年' + str(dt.month) + u'月' + str(dt.day) + u'日。'
+			weather_text += str(dt.year) + u'年' + str(dt.month) + u'月' + str(dt.day) + u'日。'
 
 			# 天気の読み上げをセット
 			weather = open_weather.getWeather(weather_key)
 			try:
-				speech_text += weather['city']['name'] + u'の正午の天気は、'
-				speech_text += weather['list'][0]['weather'][0]['description'] + u'。'
-				speech_text += u'最高気温は、' + str(weather['list'][0]['main']['temp_max']) + u'度。'
-				speech_text += u'最低気温は、' + str(weather['list'][0]['main']['temp_min']) + u'度。'
-				speech_text += u'15時の天気は、' + weather['list'][1]['weather'][0]['description'] + u'だよ。'
+				weather_text += weather['city']['name'] + u'の正午の天気は、'
+				weather_text += weather['list'][0]['weather'][0]['description'] + u'。'
+				weather_text += u'最高気温は、' + str(weather['list'][0]['main']['temp_max']) + u'度。'
+				weather_text += u'最低気温は、' + str(weather['list'][0]['main']['temp_min']) + u'度。'
+				weather_text += u'15時の天気は、' + weather['list'][1]['weather'][0]['description'] + u'だよ。'
 			except TypeError:
 				print('💥Error: open weather type error')
 				pass
 			
+			# 💬次の音声の生成
+			jtalk.generate_jtalk(weather_text, 'talk_weather')
+
+			# 💬前の再生が終わるのを待って次の次のトークの読み上げ
+			talk_announce.wait()
+			talk_weather = jtalk.speech_jtalk('talk_weather')
+			
 			# カレンダーの読み上げをセット
+			calendar_text = ''
 			events = google_calender.get_events()
-			speech_text += u'今日の予定は、' + events + u'だよ。'
+			calendar_text += u'今日の予定は、' + events + u'だよ。'
 
-			speech_text += u'おしまい。いってらっしゃーい！'
+			# 💬次の音声の生成
+			jtalk.generate_jtalk(calendar_text, 'talk_event')
 
-			jtalk.jtalk(speech_text)
+			# 💬前の再生が終わるのを待って次の次のトークの読み上げ
+			talk_weather.wait()
+			talk_event = jtalk.speech_jtalk('talk_event')
+			
+			# 💬次の音声の生成
+			jtalk.generate_jtalk(u'おしまい。いってらっしゃーい！', 'talk_finish')
+
+			# 💬前の再生が終わるのを待って次の次のトークの読み上げ
+			talk_event.wait()
+			jtalk.speech_jtalk('talk_finish')
 
 		elif word == 'おやすみ':
 			# 挨拶の読み上げ
 			goodnight_greet = [u'おやすみまる']
-			jtalk.jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！' + random.choice(goodnight_greet))
+			jtalk.generate_jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！' + random.choice(goodnight_greet), 'talk_night')
+			talk_night = jtalk.speech_jtalk('talk_night')
 
 			# TODO: 仮でコメントアウト
 			# Toggl trackに記録を開始
@@ -109,7 +138,10 @@ while True:
 			# if id is not None:
 			# 	r = toggl.stop(id)
 			# toggl.start("睡眠", 168180846) # ベタがき
-		
+
+			# 💬前の再生が終わるのを待つ
+			talk_night.wait()
+
 		print('🐛 debug６')
 		print('🐛 res：' + res)
 		res = ''

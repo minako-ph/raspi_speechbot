@@ -1,4 +1,4 @@
-open_jtalk.wav
+*.wav
 *.pyc
 .env
 credentials.json
