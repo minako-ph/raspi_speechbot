@@ -51,7 +51,7 @@ def get_events():
     event_text = ''
 
     if not events:
-        event_text = u'今日の予定はありません'
+        event_text += u'今のところ特になし'
         print(event_text)
         return event_text
     else:

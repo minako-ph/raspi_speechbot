@@ -59,11 +59,12 @@ while is_ready == True:
 			morning_greet = [u'おはよう']
 			jtalk.jtalk(random.choice(morning_greet) + u'！')
 
+			# TODO: 仮でコメントアウト
 			# Toggl trackの記録を終了
 			jtalk.jtalk(u'睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。')
-			id = toggl.get_running_time_entry()
-			if id is not None:
-				r = toggl.stop(id)
+			# id = toggl.get_running_time_entry()
+			# if id is not None:
+			# 	r = toggl.stop(id)
 
 			jtalk.jtalk(u'今日の天気や予定を読み上げるよ。')
 
@@ -99,11 +100,11 @@ while is_ready == True:
 			goodnight_greet = [u'おやすみまる']
 			jtalk.jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！' + random.choice(goodnight_greet))
 
-			# Toggl trackに記録を開始
-			id = toggl.get_running_time_entry()
-			if id is not None:
-				r = toggl.stop(id)
 			# TODO: 仮でコメントアウト
+			# Toggl trackに記録を開始
+			# id = toggl.get_running_time_entry()
+			# if id is not None:
+			# 	r = toggl.stop(id)
 			# toggl.start("睡眠", 168180846) # ベタがき
 
 			time.sleep(3)
