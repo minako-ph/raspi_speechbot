@@ -79,7 +79,7 @@ while True:
 			events = google_calender.get_events()
 			speech_text += u'今日の予定は、' + events + u'だよ。'
 
-			speech_text += u'いってらっしゃ〜い！'
+			speech_text += u'おしまい。いってらっしゃ〜い！'
 
 			jtalk.jtalk(speech_text)
 

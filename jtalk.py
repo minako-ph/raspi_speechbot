@@ -17,7 +17,7 @@ def jtalk(t):
     # 音声の読み上げ
     aplay = ['aplay','-q','open_jtalk.wav','-Dhw:0,0']
     wr = subprocess.Popen(aplay) # 同期処理にしたい
-    # wr.wait()
+    wr.wait()
 
 def say_datetime():
     d = datetime.now()
