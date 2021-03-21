@@ -67,7 +67,7 @@ while True:
 
 			# 💬挨拶の読み上げ
 			morning_greet = u'おはよう！睡眠の記録を終了するよ。今日も一日頑張っていきまっしょい。'
-			jtalk.generate_jtalk(morning_greet, 'talk_morning')
+			# jtalk.generate_jtalk(morning_greet, 'talk_morning') # NOTE: 静的ファイルなので初回のみ生成
 			talk_morning = jtalk.speech_jtalk('talk_morning')
 
 			# FIXME: debug用にコメントアウト
@@ -77,7 +77,7 @@ while True:
 			# 	r = toggl.stop(id)
 
 			# 💬次の音声の生成
-			jtalk.generate_jtalk(u'今日の天気や予定を読み上げるよ。調べるからちょっと待ってねぇ。', 'talk_announce')
+			# jtalk.generate_jtalk(u'今日の天気や予定を読み上げるよ。調べるからちょっと待ってねぇ。', 'talk_announce') # NOTE: 静的ファイルなので初回のみ生成
 
 			# 💬前の再生が終わるのを待って次の次のトークの読み上げ
 			talk_morning.wait()
@@ -120,16 +120,18 @@ while True:
 			talk_event = jtalk.speech_jtalk('talk_event')
 			
 			# 💬次の音声の生成
-			jtalk.generate_jtalk(u'おしまい。いってらっしゃーい！', 'talk_finish')
+			# jtalk.generate_jtalk(u'おしまい。いってらっしゃーい！', 'talk_finish') # NOTE: 静的ファイルなので初回のみ生成
 
 			# 💬前の再生が終わるのを待って次の次のトークの読み上げ
 			talk_event.wait()
-			jtalk.speech_jtalk('talk_finish')
+			talk_finish = jtalk.speech_jtalk('talk_finish')
+
+			# 💬前の再生が終わるのを待つ
+			talk_finish.wait()
 
 		elif word == 'おやすみ':
 			# 挨拶の読み上げ
-			goodnight_greet = [u'おやすみまる']
-			jtalk.generate_jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！' + random.choice(goodnight_greet), 'talk_night')
+			# jtalk.generate_jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！おやすみまる。', 'talk_night')  # NOTE: 静的ファイルなので初回のみ生成
 			talk_night = jtalk.speech_jtalk('talk_night')
 
 			# TODO: 仮でコメントアウト
