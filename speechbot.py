@@ -44,6 +44,7 @@ while True:
 			if line != '[s]':
 				# Note: おはようの次はおはよう[/s]となる
 				word = word + line
+				print('🐛 word：' + word)
 
 		if word == 'おはよう':
 			# 挨拶の読み上げをセット
@@ -79,7 +80,7 @@ while True:
 			events = google_calender.get_events()
 			speech_text += u'今日の予定は、' + events + u'だよ。'
 
-			speech_text += u'おしまい。いってらっしゃ〜い！'
+			speech_text += u'おしまい。いってらっしゃーい！'
 
 			jtalk.jtalk(speech_text)
 

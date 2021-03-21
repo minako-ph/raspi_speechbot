@@ -52,14 +52,12 @@ def get_events():
 
     if not events:
         event_text += u'今のところ特になし'
-        print(event_text)
         return event_text
     else:
         for event in events:
             start = event['start'].get('dateTime', event['start'].get('date'))
             event_text += str(start[11:13]) + u'時' + str(start[14:16]) + u'分に'
             event_text += event['summary'] + u'、'
-        print(event_text)
         return event_text
 
 if __name__ == '__main__':
