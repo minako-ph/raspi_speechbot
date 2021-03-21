@@ -95,6 +95,4 @@ while True:
 			# 	r = toggl.stop(id)
 			# toggl.start("睡眠", 168180846) # ベタがき
 
-			time.sleep(3)
-
 		res = ''
