@@ -28,22 +28,36 @@ sock.connect((host, port))
 
 res = ''
 while True:
+	print('🐛 debug１')
+	print('🐛 res：' + res)
+
 	# 音声認識の区切りである「改行+.」がくるまで待つ
 	while (res.find('\n.') == -1):
 		# Juliusから取得した値を格納していく
 		res += sock.recv(1024)
+		print('🐛 debug２')
+		print('🐛 res：' + res)
+
 	word = ''
 	for line in res.split('\n'):
+		print('🐛 debug３')
+		print('🐛 res：' + res)
+		print('🐛 line：' + line)
+
 		# Juliusから取得した値から認識文字列の行を探す
 		index = line.find('WORD=')
 		# 認識文字列があった場合
 		if index != -1:
 			# 認識文字列部分だけを抜き取る
 			line = line[index + 6 : line.find('"', index + 6)]
+			print('🐛 debug４')
+			print('🐛 line：' + line)
+
 			# 文字列の開始記号以外を格納していく
 			if line != '[s]':
 				# Note: おはようの次はおはよう[/s]となる
 				word = word + line
+				print('🐛 debug５')
 				print('🐛 word：' + word)
 
 		if word == 'おはよう':
@@ -95,5 +109,9 @@ while True:
 			# if id is not None:
 			# 	r = toggl.stop(id)
 			# toggl.start("睡眠", 168180846) # ベタがき
-
+		
+		print('🐛 debug６')
+		print('🐛 res：' + res)
 		res = ''
+		print('🐛 debug７')
+		print('🐛 res：' + res)
