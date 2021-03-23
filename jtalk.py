@@ -17,7 +17,7 @@ def generate_jtalk(text, name):
 
 def speech_jtalk(name):
     # 音声の読み上げ
-    aplay = ['aplay','-q',name + '.wav','-Dhw:0,0']
+    aplay = ['aplay','-q',name + '.wav','-D','bluealsa']
     wr = subprocess.Popen(aplay)
     return wr
 
