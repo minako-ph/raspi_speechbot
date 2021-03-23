@@ -56,7 +56,7 @@ while True:
 
 			if word == 'おはよう':
 				print('🐛 debug６')
-				time.sleep(2)
+				time.sleep(1)
 
 				# TODO: バラバラになってしまった💬の処理をまとめる
 
@@ -125,7 +125,7 @@ while True:
 				talk_finish.wait()
 
 			elif word == 'おやすみ':
-				time.sleep(2)
+				time.sleep(1)
 
 				# 挨拶の読み上げ
 				# jtalk.generate_jtalk(u'睡眠の記録を開始するよ。今日も1日お疲れ様！おやすみまる。', 'talk_night')  # NOTE: 静的ファイルなので初回のみ生成
